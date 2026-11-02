@@ -25,7 +25,7 @@ body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-
 .ti{font-size:7.8cqw;font-weight:900;margin-top:1.3cqw;letter-spacing:-.2cqw;outline:0}
 .tb{display:grid;grid-template-columns:5.5cqw 10cqw 1fr;grid-template-rows:repeat(4,minmax(0,1fr));gap:.3cqw;background:#fff;border:.3cqw solid #fff}
 .tb>*{background:#18489c;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:2.3cqw;line-height:1;white-space:nowrap;min-width:0;min-height:0}
-.tb .v{border:0;height:100%;padding:0 1cqw;font:inherit;font-weight:600;background:#fff;color:#111;caret-color:#111;text-align:left;justify-content:flex-start;width:100%;outline:0}
+.tb .v{border:0;height:100%;padding:0 1cqw;font:inherit;font-size:3.2cqw;font-weight:700;background:#fff;color:#111;caret-color:#111;text-align:left;justify-content:flex-start;width:100%;outline:0}
 .tb .m{grid-row:2/5;writing-mode:vertical-rl;letter-spacing:.1cqw}
 /* rows */
 .rw{display:grid;grid-template-columns:9cqw 1fr;min-height:0}
@@ -110,7 +110,7 @@ function build(){
   h+='</div></div>';
  });
  h+=`<div class="ft"><div contenteditable="true" data-f="0">${S.foot[0]}</div><div contenteditable="true" data-f="1">${S.foot[1]}</div></div>`;
- $('in').innerHTML=h;
+ $('in').innerHTML=h;fitAll();
 }
 $('in').addEventListener('change',e=>{
  const t=e.target;if(t.tagName!=='SELECT')return;
@@ -121,7 +121,7 @@ $('in').addEventListener('change',e=>{
 });
 $('in').addEventListener('input',e=>{
  const t=e.target;
- if(t.dataset.t!==undefined)S.tx[+t.dataset.t]=t.value;
+ if(t.dataset.t!==undefined){S.tx[+t.dataset.t]=t.value;fit(t);}
  if(t.dataset.f!==undefined)S.foot[+t.dataset.f]=t.innerHTML;
  if(t.id==='ti')S.title=t.innerText;
  save();
@@ -141,7 +141,9 @@ function size(){
 $('w').oninput=size;
 document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{$('w').value=b.dataset.w;size();});
 $('prt').onclick=()=>window.print();
-build();size();
+function fit(el){el.style.fontSize='';const k=el.clientWidth/el.scrollWidth;if(k<1)el.style.fontSize='calc(3.2cqw*'+Math.max(.4,k*.97).toFixed(3)+')';}
+function fitAll(){document.querySelectorAll('.tb .v').forEach(fit);}
+build();size();fitAll();
 </script>
 </body>
 </html>
